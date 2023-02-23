@@ -80,7 +80,7 @@ For this map, we will use the 2021 GDP values for all US states provided by the 
 
 ```{r, warning=FALSE, message=FALSE}
 library(tidyverse)
-states_gdp <- read_csv('data/shapefiles/states_gdp.csv')
+states_gdp <- read_csv('data/states_gdp.csv')
 states_gdp
 ```
 
