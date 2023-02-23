@@ -58,7 +58,7 @@ ggplot()+geom_sf(data = countries)+geom_sf(data = states)+theme_minimal()
 
 Now we see all states plus the countries around the US (Canada and Mexico). This is better, cause now the US area seems connected to the countries around (like in real life). However, the countries dataset that we used contains all countries in the world, so `ggplot` will be default try to plot everything (which is why our new map shows the whole world and no focus on our actual goal).
 
-To solve this issue, we can use the function `coord_sf` to tell `ggplot` the *geographic extent* of our map. We need to do so by providing two vectors to this function: a vector called **xlim**, where we tell the lowest and hightest longitude (in that order) of our extent; 2) and a vector called **ylim**, where we tell the lowest and highest latitude (in that order) of our extent. These values are given as decimal coordinates. You can easily retrieve them by checking google maps (or any other map application), to figure our the lower and highest values that would encompass the area you wanna plot.
+To solve this issue, we can use the function `coord_sf` to tell `ggplot` the *geographic extent* of our map. We need to do so by providing two vectors to this function: a vector called **xlim**, where we tell the lowest and highest longitude (in that order) of our extent; 2) and a vector called **ylim**, where we tell the lowest and highest latitude (in that order) of our extent. These values are given as decimal coordinates. You can easily retrieve them by checking google maps (or any other map application), to figure our the lower and highest values that would encompass the area you wanna plot.
 
 For our map, we will use the values shown bellow to focus on the lower 48 states.
 
