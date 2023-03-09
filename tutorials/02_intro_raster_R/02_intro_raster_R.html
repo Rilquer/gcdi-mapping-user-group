@@ -87,16 +87,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </style>
 
 
-<script src="01_intro_raster_R_files/libs/clipboard/clipboard.min.js"></script>
-<script src="01_intro_raster_R_files/libs/quarto-html/quarto.js"></script>
-<script src="01_intro_raster_R_files/libs/quarto-html/popper.min.js"></script>
-<script src="01_intro_raster_R_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="01_intro_raster_R_files/libs/quarto-html/anchor.min.js"></script>
-<link href="01_intro_raster_R_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="01_intro_raster_R_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="01_intro_raster_R_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="01_intro_raster_R_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="01_intro_raster_R_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="02_intro_raster_R_files/libs/clipboard/clipboard.min.js"></script>
+<script src="02_intro_raster_R_files/libs/quarto-html/quarto.js"></script>
+<script src="02_intro_raster_R_files/libs/quarto-html/popper.min.js"></script>
+<script src="02_intro_raster_R_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="02_intro_raster_R_files/libs/quarto-html/anchor.min.js"></script>
+<link href="02_intro_raster_R_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="02_intro_raster_R_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="02_intro_raster_R_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="02_intro_raster_R_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="02_intro_raster_R_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -196,7 +196,7 @@ values     : -54.73946, 31.05112  (min, max)</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mean_temp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>We can see that R created a bounding box and show us the longitudes and latitudes. Additionally, it has a standard color palette for the values (green for highest values and pinkish to white for lower values), and it shows us a legend for those values.</p>
@@ -231,7 +231,7 @@ max values :       31.05112,     11191.00000 </code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>…which shows both variables with their respective titles and legends.</p>
@@ -239,13 +239,13 @@ max values :       31.05112,     11191.00000 </code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate[[<span class="dv">2</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Before we move on to manipulating our object, let’s change the names of the layers inside this stack, to make our coding easier down the road. For that, we use the function <code>names()</code> and we assign to it a vector of new names in the <code>chatacter</code> format (i.e., within quotes).</p>
@@ -278,7 +278,7 @@ max values :    31.05112, 11191.00000 </code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate_namer[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>We can also call the object and confirm that our extent has changed:</p>
@@ -308,14 +308,14 @@ max values :   28.56683, 5353.00000 </code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate_namer_lowres[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>And now let’s plot the one with higher resolution:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate_namer[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>We cannot see much different with this extent, which maybe good. Feels like we did not lose a lot of information in here. Additionally, if you look at your environment, you will see the new object with lower resolution is around a quarter of the size (2.2 MB) of the old object (8.7 MB).</p>
@@ -361,7 +361,7 @@ max values :   28.56683, 5353.00000 </code></pre>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>climate_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(climate_values)</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> climate_values,<span class="fu">aes</span>(<span class="at">x =</span> temp, <span class="at">y =</span> prec))<span class="sc">+</span><span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>There doesn’t seem to be much of a relationship, or maybe there are too many outliers. We can see that the range of precipitation is mostly the same no matter what temperature, except for two peaks: one around 8 degres Celsius an danother above 25 degrees. These are the temperatures where we see the highest levels of precipitation.</p>
@@ -387,7 +387,7 @@ max values :   28.56683, 5353.00000 </code></pre>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate_namer_lowres[[<span class="dv">1</span>]])</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ny_state,<span class="at">add=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Okay, everything looks good. Now our next step is to create a raster object that contains only the values present within the boundaries of New York State. For that, we using the function <code>mask</code>. We say we are <em>masking</em> our raster object by the NY state polygon, effectively removing everything that does not fall within the polygon.</p>
@@ -398,7 +398,7 @@ max values :   28.56683, 5353.00000 </code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ny_climate[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>It worked! Notice that the new object maintains the extent of the old object. This happens because what the function is actually doing is assigning a <code>NA</code> value to anything that falls outside the polygons, but it doesn’t actually remove the cells from the matrix. You can do that by using the <code>crop</code> function to actually reduce the extent, but we will skip that for now (it won’t affect our next steps).</p>
@@ -408,7 +408,7 @@ max values :   28.56683, 5353.00000 </code></pre>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>ny_climate_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(ny_climate_values)</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ny_climate_values,<span class="fu">aes</span>(<span class="at">x =</span> temp, <span class="at">y =</span> prec))<span class="sc">+</span><span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>We have fewer points here, and still not a super clear pattern, but something starts to show. It looks like under 10 degrees Celsius precipitation tends to decrease as temperature increases. Then we have somewhat higher precipitation again above 10 degrees, with a slight decrease as temperature goes up.</p>
@@ -426,7 +426,7 @@ max values :   28.56683, 5353.00000 </code></pre>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> states, <span class="at">alpha =</span> <span class="dv">0</span>)<span class="sc">+</span></span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">141</span>,<span class="sc">-</span><span class="dv">51</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">17</span>,<span class="dv">59</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>The plot is following the parameters we set, but we could work a little bit with the color gradient and the color of the lines, to make them more visible. We will use the function <code>scale_fill_viridis</code> from package <code>viridis</code> to set our color palette to one of the options available in this package. You can see all options from this package can be seen <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html">here</a>. They were develop for better representation of data and to be easier to read by those with colorblindness.</p>
@@ -442,7 +442,7 @@ max values :   28.56683, 5353.00000 </code></pre>
 <span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis</span>()<span class="sc">+</span></span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">141</span>,<span class="sc">-</span><span class="dv">51</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">17</span>,<span class="dv">59</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+<p><img src="02_intro_raster_R_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
