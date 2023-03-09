@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Rilquer Mascarenhas">
+
+<title>Intro to raster spatial data in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="01_intro_raster_R_files/libs/clipboard/clipboard.min.js"></script>
+<script src="01_intro_raster_R_files/libs/quarto-html/quarto.js"></script>
+<script src="01_intro_raster_R_files/libs/quarto-html/popper.min.js"></script>
+<script src="01_intro_raster_R_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="01_intro_raster_R_files/libs/quarto-html/anchor.min.js"></script>
+<link href="01_intro_raster_R_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="01_intro_raster_R_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="01_intro_raster_R_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="01_intro_raster_R_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="01_intro_raster_R_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Intro to raster spatial data in R</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Rilquer Mascarenhas </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<h2 id="learning-objectives" class="anchored">Learning Objectives</h2>
+<ul>
+<li>Load and plot raster spatial data into R</li>
+<li>Changing the extent and resolutionof a raster object</li>
+<li>Extracting values from raster objects</li>
+<li>Plotting raster objects with the <code>ggplot</code> package</li>
+</ul>
+<h5 id="functions-taught-in-this-tutorial" class="anchored">Functions taught in this tutorial:</h5>
+<p><code>raster()</code>, <code>stack()</code>, <code>crop()</code>, <code>aggregate()</code>, <code>ncell()</code> <code>rasterToPoints()</code>, <code>mask()</code>, <code>geom_raster</code></p>
+<h5 id="packages-used-in-this-tutorial" class="anchored">Packages used in this tutorial:</h5>
+<p><code>raster</code>, <code>sf</code>, <code>ggplot</code>, <code>dplyr,</code> <code>viridis</code></p>
+</blockquote>
+<p>This tutorial will go over how to import and manipulate raster spatial data in the R environment. A good introduction to the concepts of raster data can be found in this <a href="https://desktop.arcgis.com/en/arcmap/latest/manage-data/raster-and-images/what-is-raster-data.htm">ArcGis Webpage</a>. Basically, raster files consist of a <a href="https://desktop.arcgis.com/en/arcmap/latest/manage-data/raster-and-images/GUID-6754AF39-CDE9-4F9D-8C3A-D59D93059BDD-web.png">rectangle-shaped image file</a> used to store spatial data about a specific section of the surface of the earth. Similar to any image file, raster files are composed of several little squares of equal cizes, called <strong>cells</strong>. Each raster file store values from one specific continuous or categorical variable (e.g., temperature, precipitation, altitude, population density, disease prevalence, annual income, presence/absence of a park). Since a raster file represents an area space, each cell is also associated with a specific area within that space, and represents the value for that variable in that space.</p>
+<p>Raster files are then useful to store larges amount of that varying over the same area surface. The limits of the geographic space covered by a raster is called its <strong>extent</strong>. The size of the cell determines how much information is stored in that raster: larger cells mean less data is stored for that geographic area, so it means less information, or, in technical terms, a less <a href="https://desktop.arcgis.com/en/arcmap/latest/manage-data/raster-and-images/GUID-28F4DF81-C24F-4B14-A3FE-74B9737766D1-web.gif"><strong>resolution</strong></a><strong>.</strong></p>
+<p>More info and some of the R commanda covered here can be found in this <a href="https://digitalfellows.commons.gc.cuny.edu/2023/02/22/using-raster-spatial-data-in-r/">blog post</a>.</p>
+<section id="loading-and-visualizing-raster-objects" class="level3">
+<h3 class="anchored" data-anchor-id="loading-and-visualizing-raster-objects">1. Loading and visualizing raster objects</h3>
+<p>In R, raster files are treated as <code>raster</code> objects, from the <code>raster</code> package. We will start by loading one raster file into R.</p>
+<p>First, we install and load the <code>raster</code> package. Remember: if you already have the <code>raster</code> package installed, you do not need to run the <code>install.packages()</code> function.</p>
+<blockquote class="blockquote">
+<p>Don’t know if you have <code>raster</code> package installed? Just run <code>library(raster)</code> and see what shows up. If you get an error saying <code>There is no package called 'raster'</code>, that means you don’t have it installed.</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'raster'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(raster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this tutorial, we will use two raster files form the <a href="https://www.worldclim.org/data/worldclim21.html">WorldClim</a> database. This database provides raster files for global temperature and precipitation per month, as well as one file for each of the 19 so-called <a href="https://www.worldclim.org/data/bioclim.html">Bioclimatic Variables</a>. These variables are derived from the monthly temperature and precipitation values, and represent annual trends, seasonality and extremes of those variables. Biologists use these variables a lot to try and understand what make species able to live in certain places and not others. Here we will use two bioclimatic variables: <strong>bio01</strong> (mean annual temperature) and <strong>bio12</strong> (mean annual precipitation).</p>
+<p>Let’s first load the temperature data. The raster file we will use is in the <strong>.tif</strong> format, a common format for image files (you can find raster files in other formats such as <strong>.grd</strong>). It is located in our <code>data</code> folder, so we will proceed as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mean_temp <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">'data/wc2.1_5m_bio_1.tif'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s take a look at the object we just created by calling it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mean_temp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class      : RasterLayer 
+dimensions : 2160, 4320, 9331200  (nrow, ncol, ncell)
+resolution : 0.08333333, 0.08333333  (x, y)
+extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+crs        : +proj=longlat +datum=WGS84 +no_defs 
+source     : wc2.1_5m_bio_1.tif 
+names      : wc2.1_5m_bio_1 
+values     : -54.73946, 31.05112  (min, max)</code></pre>
+</div>
+</div>
+<p>From the console output, we can see some information:</p>
+<ol type="1">
+<li>this is an object of class <code>RasterLayer</code>;</li>
+<li>The object is composed by 2160 rows and 4320 columns, resulting in over 9 million cells. Think of this as a matrix, which several cells: that is how R stores the object.</li>
+<li>The resolution of the raster object is given in decimal degrees. The resolution here represents the length in space of the sides of a cell (refer to the links above for more info on resolution). The output here shows that the side of a cell is 0.08 (or 8%) of one arc-degree. Degree is a unit of measurement for spherical surfaces, and it is one way of measuring distances on the surface of the earth. The length represented by one arc-degree changes depending on what latitude of the planet you are: on the equator, one arc-degree equals approximately 111 km. 8% of 111km = 8.88 km. This would be the approximate length at the equator of the sides of each cell in this raster file.</li>
+<li>The extent is given as a vector of four values:
+<ol type="1">
+<li><p>xmin (lower longitude, limit to the west) = -180</p></li>
+<li><p>xmax (highest longitude, limit to the east) = 180</p></li>
+<li><p>ymin (lower latitude, limit to the south) = -90</p></li>
+<li><p>ymax (higher latitude, limit to the north) = 90</p></li>
+</ol></li>
+</ol>
+<p>The output also showd additional info such as the source (name of the file), the name of the layer inside the object, and the values (minimum and maximum value found in the matrix).</p>
+<p>Based on the extent, we can tell that this raster object covers the entire worlds (it goes from longitude -180 to longitude 180, as well as latitude -90 to 90). Let’s plot it so we can see the data on space:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mean_temp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can see that R created a bounding box and show us the longitudes and latitudes. Additionally, it has a standard color palette for the values (green for highest values and pinkish to white for lower values), and it shows us a legend for those values.</p>
+<p>This is a good first interaction with our object. But we still have another file to load, showing us the mean annual precipitation. We could load this second file as a separate <code>raster</code> object, and have two objects in our environment… Or we could create a <code>stack</code> of raster layers.</p>
+<p><code>stack</code> is a specific raster object in the <code>raster</code> package that allows us to, literally, stack several raster files with the same extent and resolution into one object. This keeps our environment less messy (avoid having several objects) and allows to further manipulate different raster layers files all together, as well as better integrate them in further analyses.</p>
+<p>We can make a stack using the function <code>stack</code>. We provide to the function a vector with the location of the files in our folders:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>climate <span class="ot">&lt;-</span> <span class="fu">stack</span>(<span class="fu">c</span>(<span class="st">'data/wc2.1_5m_bio_1.tif'</span>,<span class="st">'data/wc2.1_5m_bio_12.tif'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s call this object to see what is in it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>climate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class      : RasterStack 
+dimensions : 2160, 4320, 9331200, 2  (nrow, ncol, ncell, nlayers)
+resolution : 0.08333333, 0.08333333  (x, y)
+extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+crs        : +proj=longlat +datum=WGS84 +no_defs 
+names      : wc2.1_5m_bio_1, wc2.1_5m_bio_12 
+min values :      -54.73946,         0.00000 
+max values :       31.05112,     11191.00000 </code></pre>
+</div>
+</div>
+<p>We can see the output is very similar, with a few differences:</p>
+<ol type="1">
+<li>The class of our object is now <code>RasterStack</code>.</li>
+<li>Dimensions are the same, but we have an extra info there: <code>nlayers</code> (which is 2, denoting that we have to raster files in this stack).</li>
+<li>Resolution and extent are the same.</li>
+</ol>
+<p>Also notice that we have two values now in <code>names</code>, which are the names of the two variables we loading into this stack.</p>
+<p>We can plot this object…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>…which shows both variables with their respective titles and legends.</p>
+<p>Or we can plot one layer at a time:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate[[<span class="dv">2</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Before we move on to manipulating our object, let’s change the names of the layers inside this stack, to make our coding easier down the road. For that, we use the function <code>names()</code> and we assign to it a vector of new names in the <code>chatacter</code> format (i.e., within quotes).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(climate) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'temp'</span>,<span class="st">'prec'</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>climate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class      : RasterStack 
+dimensions : 2160, 4320, 9331200, 2  (nrow, ncol, ncell, nlayers)
+resolution : 0.08333333, 0.08333333  (x, y)
+extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+crs        : +proj=longlat +datum=WGS84 +no_defs 
+names      :        temp,        prec 
+min values :   -54.73946,     0.00000 
+max values :    31.05112, 11191.00000 </code></pre>
+</div>
+</div>
+</section>
+<section id="changing-extent-and-resolution" class="level3">
+<h3 class="anchored" data-anchor-id="changing-extent-and-resolution">2. Changing extent and resolution</h3>
+<p>Now that we have our files loaded up, let’s go over some functions to modify what we have.</p>
+<p>Let’s say we want to focus on the the temperature and precipitation values for North America. We can modify the extent of our <code>stack</code> object to a smaller coverage. If you have gone over the <a href="https://github.com/Rilquer/gcdi-mapping-user-group/blob/main/tutorials/01_intro_vector_R/01_intro_vector_R.md">Intro to Vector Data</a> tutorial, then you will remember that we can define the extent by supplying a vector with the values <code>xmin</code>, <code>xmax</code>, <code>ymin</code> and <code>ymax</code>, in that exact order. We can do use that defined extent in the <code>crop</code> function from the <code>raster</code> package to reduce the extent of all layers in our stack.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>climate_namer <span class="ot">&lt;-</span> <span class="fu">crop</span>(climate,<span class="fu">c</span>(<span class="sc">-</span><span class="dv">141</span>,<span class="sc">-</span><span class="dv">51</span>,<span class="dv">17</span>,<span class="dv">59</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>Reminder: <code>xmin</code> and <code>xmax</code> are the westernmost and easternmost longitude values, respectively. <code>ymin</code> and <code>ymax</code> are the southernmost and northernmost latitude values, respectively. Negative <code>x</code> is the west of the prime meridian; positive <code>x</code> is the east of the prime meridian; negative <code>y</code> is everything below the equator (southern hemisphere); positive <code>y</code> is everything above the equator (northern hemisphere).</p>
+</blockquote>
+<p>Now we can plot this new stack to see what it looks like. Let’s just plot the first layer:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate_namer[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We can also call the object and confirm that our extent has changed:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>climate_namer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class      : RasterBrick 
+dimensions : 504, 1080, 544320, 2  (nrow, ncol, ncell, nlayers)
+resolution : 0.08333333, 0.08333333  (x, y)
+extent     : -141, -51, 17, 59  (xmin, xmax, ymin, ymax)
+crs        : +proj=longlat +datum=WGS84 +no_defs 
+source     : memory
+names      :       temp,       prec 
+min values :  -8.905084,  46.000000 
+max values :   28.56683, 5353.00000 </code></pre>
+</div>
+</div>
+<p>This file we are working with is a pretty manageable size. Even the raster containing all the globe information did not take that long to load. This will not always be the case tho: the nature of raster files means that they can scale to very large files if you are dealing with larger extents of the planet and high resolutions. For instance, this <a href="https://data.cityofnewyork.us/City-Government/1-foot-Digital-Elevation-Model-DEM-/dpc8-z3jc">digital elevation model of NYC</a> is a raster file containing the elevation above sea level across the entire city in a resolution of 1 foot, meaning each cell covers an area of 1 ft<sup>2</sup>. That is a pretty small area, which explains why this file is 3.3 GB in size (many many tiny cells to cover the entire city). In such cases, especially when such a high resolution is not important for your question, it might be worth it to decrease the resolution by merging cells together, effectively decreasing the number of cells and the amount of space you will be occupying in your computer’s memory.</p>
+<p>Decreasing the resolution of a raster in R means merging adjacent cells together into one single cell. This is done in R by the function <code>aggregate</code> in the <code>raster</code> package. Two important parameters are needed to use this function: the <strong>factor</strong> by which we want to aggregate, and the <strong>function</strong> we will use to calculate the resulting value of the new cell.</p>
+<p>The factor dictates how many cells we are merging together. If 2, it means cells will be merged in pair, both in the horizontal and vertical direction. This effectively means we are merging four cells into one bigger cell. If 3, it means cells will be merged in groups of three (horizontally and vertically). This effectively means we are merging 9 cells. And so on. Check <a href="https://desktop.arcgis.com/en/arcmap/latest/tools/spatial-analyst-toolbox/how-aggregate-works.htm">this link</a> with a visual example of what an aggregation where factor = 5.</p>
+<p>The function dictates what will be the value of the new cell that is formed from the merge of existing cells. Usually, a good approach is to calculate the average value. So if four cells are merged into one, the value of the new cell will be the mean of the values that existed in the four cells. Naturally, this means we are losing some information, which is unavoidable when are decreasing the resolution of a raster.</p>
+<p>Let’s try decreasing the resolution of our cropped raster by a factor of 2:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>climate_namer_lowres <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(climate_namer, <span class="at">fact =</span> <span class="dv">2</span>, <span class="at">fun =</span> mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s plot the new stack (just the first variable):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate_namer_lowres[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>And now let’s plot the one with higher resolution:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate_namer[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We cannot see much different with this extent, which maybe good. Feels like we did not lose a lot of information in here. Additionally, if you look at your environment, you will see the new object with lower resolution is around a quarter of the size (2.2 MB) of the old object (8.7 MB).</p>
+<p>We can use function <code>ncell()</code> to retrieve the number of cells for each stack and confirm that the lower resolution stack has fewer cells.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncell</span>(climate_namer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 544320</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ncell</span>(climate_namer_lowres)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 136080</code></pre>
+</div>
+</div>
+</section>
+<section id="extracting-values-based-on-a-shapefile" class="level3">
+<h3 class="anchored" data-anchor-id="extracting-values-based-on-a-shapefile">3. Extracting values based on a shapefile</h3>
+<p>Now that we have two raster layers with a focused extent and a manageable resolution, we might want to extract extracting values to perform data visualization and statistical analyses. For instance, let’s say we want to see if temperature is correlated to precipitation in any way in North America. One useful function to extract the values present in this <code>rasterstack</code> is <code>rasterToPoints()</code>. This function will return a matrix where rows correspond to cells. Columns will have the longitude and latitude values of each cell (usually the centroid of the cell), plus the values for each cell from any number of variables in the stack.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>climate_values <span class="ot">&lt;-</span> <span class="fu">rasterToPoints</span>(climate_namer_lowres)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can see in our environment that this matrix has 67106 rows and 4 columns. Notice that the number of rows is not exactly the number of cells in the raster because many of them consist of regions in the ocean with are assigned an <code>NA</code> value (meaning no temperature or precipitation value is assigned to them), and the function then ignores those cells. If we use the <code>head()</code> function, we can see what are those 4 columns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(climate_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             x        y       temp    prec
+[1,] -138.0833 58.91667  4.3284125 2406.00
+[2,] -137.9167 58.91667  3.7039621 2325.50
+[3,] -137.7500 58.91667  0.4837188 2003.50
+[4,] -137.5833 58.91667 -5.1237397 1613.50
+[5,] -137.4167 58.91667 -6.6319271 1504.25
+[6,] -137.2500 58.91667 -2.7652188 1603.50</code></pre>
+</div>
+</div>
+<p><code>x</code> and <code>y</code> represent the longitude and latitude, respectively. The other columns follow the names of the variables as stored in the <code>stack</code> object.</p>
+<p>A simple and straightforward way to visualize your data and look for relationships is to create a scatterplot. We can do that using <code>ggplot</code> and the geometry <code>geom_point()</code>.</p>
+<blockquote class="blockquote">
+<p>Quick <code>ggplot</code> recap: we provide to the <code>ggplot()</code> the data, and then we use <code>aes()</code> inside of <code>ggplot()</code> to say which columns need to be plotted and where (i.e., what is x axis? what is the y axis?). Then we add <code>+</code> and define our geometry (i.e., how will the data be plotted? Points? Lines? Barplot? Boxplot?). Our geometry in this case is <code>geom_point()</code>.</p>
+</blockquote>
+<p>Remember the table we have is a <code>matrix</code> object (that’s what <code>rasterToPoints()</code> returns) but <code>ggplot</code> needs a <code>data.frame</code>. So we need to convert using the function <code>data.frame()</code>. We also give the <code>alpha</code> argument to <code>geom_point()</code> to make our points have low opacity so we can see better where they are clustering.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>climate_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(climate_values)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> climate_values,<span class="fu">aes</span>(<span class="at">x =</span> temp, <span class="at">y =</span> prec))<span class="sc">+</span><span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>There doesn’t seem to be much of a relationship, or maybe there are too many outliers. We can see that the range of precipitation is mostly the same no matter what temperature, except for two peaks: one around 8 degres Celsius an danother above 25 degrees. These are the temperatures where we see the highest levels of precipitation.</p>
+<p>Well, let’s say we want to focus on just one of the US states now. What if we want use this raster to extract the temperature and precipitation across the state of New York only? First, we will need a polygon delimiting the boundaries of the state of New York (i.e., a vector data in a shapefile format). We will use the <code>sf</code> package we learned in the previous tutorial to read the shapefile.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Linking to GEOS 3.10.2, GDAL 3.4.2, PROJ 8.2.1; sf_use_s2() is TRUE</code></pre>
+</div>
+</div>
+<p>We will read the same shapefile of US states from the previous tutorial:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>states <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="st">'data/us_state_boundaries/ne_110m_admin_1_states_provinces.shp'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we will use the function <code>filter()</code> from <code>tidyverse</code> to subset this shapefile. We want only the polygon representing New York State. So we can filter out only the row (i.e, the feature) that corresponds to New York State.</p>
+<p>We load the <code>dplyr</code> package, the <code>tidyverse</code> package that contains the <code>filter()</code> function, and use <code>%&gt;%</code> to feed our <code>states</code> shapefile into the <code>filter()</code> function. Everything is saved into the object named <code>ny_state</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>ny_state <span class="ot">&lt;-</span> states <span class="sc">%&gt;%</span> <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">'New York'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s see if everything is working fine by plotting those objects in space. First we plot our raster stack (just the first variable), then we plot out new NY state shapefile, using the argument <code>add=T</code> to plot it on top of the existing raster.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(climate_namer_lowres[[<span class="dv">1</span>]])</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ny_state,<span class="at">add=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Okay, everything looks good. Now our next step is to create a raster object that contains only the values present within the boundaries of New York State. For that, we using the function <code>mask</code>. We say we are <em>masking</em> our raster object by the NY state polygon, effectively removing everything that does not fall within the polygon.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ny_climate <span class="ot">&lt;-</span> <span class="fu">mask</span>(climate_namer_lowres,ny_state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s plot the new object to visualize:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ny_climate[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It worked! Notice that the new object maintains the extent of the old object. This happens because what the function is actually doing is assigning a <code>NA</code> value to anything that falls outside the polygons, but it doesn’t actually remove the cells from the matrix. You can do that by using the <code>crop</code> function to actually reduce the extent, but we will skip that for now (it won’t affect our next steps).</p>
+<p>Now that we have this new masked raster, we can use the function <code>rasterToPoints()</code> to get the values and make a scatterplot again:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>ny_climate_values <span class="ot">&lt;-</span> <span class="fu">rasterToPoints</span>(ny_climate)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>ny_climate_values <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(ny_climate_values)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ny_climate_values,<span class="fu">aes</span>(<span class="at">x =</span> temp, <span class="at">y =</span> prec))<span class="sc">+</span><span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We have fewer points here, and still not a super clear pattern, but something starts to show. It looks like under 10 degrees Celsius precipitation tends to decrease as temperature increases. Then we have somewhat higher precipitation again above 10 degrees, with a slight decrease as temperature goes up.</p>
+<blockquote class="blockquote">
+<p><strong>Bonus Challenge</strong>: Maybe we don’t have a pattern here because we are looking at the <em>average</em> values. Notice that the values of temperature in NY range from 3 to 12 degrees, but we do know we have way lower and way higher temperatures than that in the state. What if the average precipitation actually changes with <em>seasonality</em>? Maybe more seasonal areas (where the difference between winter and summer temperatures are the largest) have the highest average precipitation rate. The raster file for temperature seasonality is present in our data folder. Try using the steps covered so far to import the data and test this new hypothesis with a quick scatterplot visualization.</p>
+</blockquote>
+</section>
+<section id="making-a-map-with-ggplot" class="level3">
+<h3 class="anchored" data-anchor-id="making-a-map-with-ggplot">4. Making a map with ggplot</h3>
+<p>Let’s finalize this tutorial by plotting our raster data along with our states shapefile using the <code>ggplot</code> package. We saw that we can make such a plot using just the <code>plot</code> function and the argument <code>add=T</code> to add layers on top of each other, but let’s see how to make that in <code>ggplot</code> so we can have nicer and easily customized plots.</p>
+<p>We already know the function <code>geom_sf()</code> to be used with shapefiles. For raster files, we can use the function <code>geom_raster()</code>. As in all <code>ggplot</code> functions, it requires a dataframe. In our case, we can use the dataframe <code>climate_values</code> that we obtained from the function <code>rasterToPoints()</code>. We just need to clarify the mapping of the function, i.e., where in the dataframe is the info we want to plant. We use the <code>aes()</code> function to tell <code>ggplot</code> that our x axis corresponds to the <code>x</code> column (longitude), y axis corresponds to the <code>y</code> column (latitude) and the color to fill the cells with should be based on the column named <code>temp</code>. Then we use <code>geom_sf</code> to call the <code>states</code> shapefile, setting the <code>alpha</code> parameter to 0 (full transparency) so the polygons do not block the underlying values of the raster. Finally, we also set <code>coord_sf</code> based on the extent of the original raster.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>(climate_values, <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y,<span class="at">fill=</span>temp))<span class="sc">+</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> states, <span class="at">alpha =</span> <span class="dv">0</span>)<span class="sc">+</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">141</span>,<span class="sc">-</span><span class="dv">51</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">17</span>,<span class="dv">59</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The plot is following the parameters we set, but we could work a little bit with the color gradient and the color of the lines, to make them more visible. We will use the function <code>scale_fill_viridis</code> from package <code>viridis</code> to set our color palette to one of the options available in this package. You can see all options from this package can be seen <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html">here</a>. They were develop for better representation of data and to be easier to read by those with colorblindness.</p>
+<p>We will also set the color of <code>geom_sf</code> to <code>antiquewhite</code>, to better visualize the states boundaries.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: viridisLite</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>(climate_values, <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y,<span class="at">fill=</span>temp))<span class="sc">+</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> states, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">'antiquewhite'</span>)<span class="sc">+</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis</span>()<span class="sc">+</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">141</span>,<span class="sc">-</span><span class="dv">51</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">17</span>,<span class="dv">59</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="01_intro_raster_R_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
