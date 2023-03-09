@@ -4,7 +4,7 @@ install.packages()
 install.packages('tidyverse')
 install.packages('sf')
 
-library(tidyverse)
+library(tidyverse) # This already loads ggplot2
 library(sf)
 
 states <- read_sf('data/shapefiles/us_state_boundaries/ne_110m_admin_1_states_provinces.shp')

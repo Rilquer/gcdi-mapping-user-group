@@ -1,7 +1,7 @@
 ---
-title: "Intro to Vector spatial data in R"
+title: "Intro to vector spatial data in R"
 author: "Rilquer Mascarenhas"
-format: pdf
+format: html
 editor: visual
 ---
 
@@ -9,14 +9,18 @@ editor: visual
 >
 > -   Load, plot and manipulate spatial data into R
 > -   Customize maps with basic functions
+>
+> ##### Packages used in this tutorial:
+>
+> `ggplot2`, `sf`, `tidyverse`, `ggspatial`
 
 This little tutorial will give you some basic commands to plot maps in R, using the packages `ggplot` and `sf`.
 
 First, let's load the necessary packages. The maps will be plotted following the `ggplot` standard, so we need that one. Additionally, our spatial objects will be loaded into R in the [SF](https://r-spatial.github.io/sf/articles/sf1.html) format, so it helps us to have the `sf` package loaded, to give us some functions to work with them.
 
 ```{r, warning=FALSE, message=FALSE}
-library("ggplot2")
-library("sf")
+library(ggplot2)
+library(sf)
 ```
 
 For this small tutorial, our goal will be to build a simple map of the lower 48 states in the United States, showing the states boundaries. We will also color code the states by their GDP and do some further customization.
@@ -31,11 +35,11 @@ We will use the states data, which is saved to out *data* folder. To load it int
 states <- read_sf('data/shapefiles/us_state_boundaries/ne_110m_admin_1_states_provinces.shp')
 ```
 
-We can quickly check on our `states` object to see what it looks like by typing it into the console and pressing enter. You can see that the `states` shapefile is stored in R as a data frame, more specifically as a *tibble* from the `tidyverse` package. This is basically an attribute table (with features as rows and attributes as columns) which is interpreted by R as a spatial file that can be plotted in geographic space using `ggplot`. You can check [this blogpost](https://digitalfellows.commons.gc.cuny.edu/2021/11/03/quick-and-easy-mapping-with-r/) and also [this website](https://r-spatial.github.io/sf/articles/sf1.html) to learn more about the Simple Feature format to store spatial data in R.
+We can quickly check on our `states` object to see what it looks like by typing it into the console and pressing enter. You can see that the `states` shapefile is stored in R as a dataframe (or a matrix). More specifically, it is saved as a *tibble*, which is the name of dataframes when used under the `tidyverse` package. This is basically an attribute table (with features as rows and attributes as columns) which is interpreted by R as a spatial file that can be plotted in geographic space using `ggplot`. You can check [this blogpost](https://digitalfellows.commons.gc.cuny.edu/2021/11/03/quick-and-easy-mapping-with-r/) and also [this website](https://r-spatial.github.io/sf/articles/sf1.html) to learn more about the Simple Feature format to store spatial data in R.
 
 Now we can plot that data using `ggplot`. Conveniently, `ggplot` already has a geometry function made to deal with `sf` spatial objects, the function `geom_sf`.
 
-```{r, warning=FALSE, message=FALSE, fig.width=4, fig.height=2}
+```{r, warning=FALSE, message=FALSE}
 ggplot()+geom_sf(data = states)
 ```
 
@@ -43,15 +47,15 @@ Notice that 1) `ggplot` automatically puts up the coordinates around your map; 2
 
 Let's try and solve these little issues step by step. First, let's use another theme besides the default theme in `ggplot`.
 
-```{r, warning=FALSE, message=FALSE, fig.width=4, fig.height=2}
+```{r, warning=FALSE, message=FALSE}
 ggplot()+geom_sf(data = states)+theme_minimal()
 ```
 
 I like this better, it feels more clean.
 
-Now, let's load an additional dataset with the countries of the world, so we can plot the states surrounded by neighbouring countries. This way, it won't feel like the US is floating in the middle of nowhere. Notice in the code below that to plot an extra spatial data (i.e., an extra *layer* in our map), we just need to repeat the geometry `geom_sf` with the new data.
+Now, let's load an additional dataset with the countries of the world, so we can plot the states surrounded by neighboring countries. This way, it won't feel like the US is floating in the middle of nowhere. Notice in the code below that to plot an extra spatial data (i.e., an extra *layer* in our map), we just need to repeat the geometry `geom_sf` with the new data.
 
-```{r, warning=FALSE, message=FALSE, fig.width=4, fig.height=2}
+```{r, warning=FALSE, message=FALSE}
 countries <- read_sf('data/shapefiles/world_countries/ne_110m_admin_0_countries.shp')
 ggplot()+geom_sf(data = countries)+geom_sf(data = states)+theme_minimal()
 ```
@@ -62,7 +66,7 @@ To solve this issue, we can use the function `coord_sf` to tell `ggplot` the *ge
 
 For our map, we will use the values shown bellow to focus on the lower 48 states.
 
-```{r, warning=FALSE, message=FALSE, fig.width=4, fig.height=2}
+```{r, warning=FALSE, message=FALSE}
 ggplot()+geom_sf(data = countries)+geom_sf(data = states)+
   coord_sf(xlim = c(-130.327727,-50.774995), ylim = c(24.321161,52.537236))+
   theme_minimal()
@@ -114,7 +118,7 @@ Let's play around with changing the aspect of our map a little bit.
 
 First, let's change the default theme used (`theme_bw()` focus on black and white lines and keeps the line of the box surrounding the plot). Let's also change the color of the countries polygons surrounding the states. We can also use the `fill` aesthetics here to inform the color we want.
 
-```{r, warning=FALSE, message=FALSE, fig.width=4, fig.height=2}
+```{r, warning=FALSE, message=FALSE}
 # Customizing background color
 ggplot()+geom_sf(data = countries, fill = 'antiquewhite')+
   geom_sf(data = states,aes(fill = gdp))+
@@ -128,7 +132,7 @@ Taking a quick look at the application, it seems to me that a sequential gradien
 
 To apply this gradient here, we will use the `ggplot` function `scale_fill_gradient2`. This function allows us to set the colors for the lower, middle and higher end of our gradient. From the [ColorBrewer](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=5) website, I can get the hexadecimal code for each color: **#f0f9e8** for light green, **#7bccc4** for the intermediate and **#0868ac** for the darker blue.
 
-```{r, warning=FALSE, message=FALSE, fig.width=4, fig.height=2}
+```{r, warning=FALSE, message=FALSE}
 ggplot()+geom_sf(data = countries, fill = 'antiquewhite')+
   geom_sf(data = states,aes(fill = gdp))+
   coord_sf(xlim = c(-130.327727,-50.774995), ylim = c(24.321161,52.537236))+
@@ -141,7 +145,7 @@ Let's move focus now to our legend. As mentioned before, we could do several cus
 
 We can get rid of the legend by setting `legend.position ='none'` in our `theme()` function.
 
-```{r, warning=FALSE, message=FALSE, fig.width=4, fig.height=2}
+```{r, warning=FALSE, message=FALSE}
 ggplot()+geom_sf(data = countries, fill = 'antiquewhite')+
   geom_sf(data = states,aes(fill = gdp))+
   coord_sf(xlim = c(-130.327727,-50.774995), ylim = c(24.321161,52.537236))+
@@ -151,7 +155,7 @@ theme(legend.position = "none")
 
 This already looks much better. Finally, let's focus on putting some information on our maps. We can add axes labels and a title the same way we did for basic graphs in `ggplot`: using the `labs()` function.
 
-```{r, warning=FALSE, message=FALSE, fig.width=4, fig.height=2}
+```{r, warning=FALSE, message=FALSE}
 # Customizing axis labels and title
 ggplot()+geom_sf(data = countries, fill = 'antiquewhite')+
   geom_sf(data = states,aes(fill = gdp))+
@@ -166,12 +170,12 @@ theme(legend.position = "none")+
 Finally, it would be nice to make our map look more professional by adding a scale and a north arrow indicator (basic items that are important in any map). We can do that by using some functions from the `ggspatial` package.
 
 ```{r, warning=FALSE, message=FALSE}
-library('ggspatial')
+library(ggspatial)
 ```
 
 To add those items, let's use the functions `annotation_scale` and `annotation_north_arrow`. We can tell `ggplot` where in our map we want those items to show up ('*br*' means the items will be plotted in the *b*ottom *r*ight corner of the map).
 
-```{r, warning=FALSE, message=FALSE, fig.width=4, fig.height=2}
+```{r, warning=FALSE, message=FALSE}
 # Adding scale and north arrow
 ggplot()+geom_sf(data = countries, fill = 'antiquewhite')+
   geom_sf(data = states,aes(fill = gdp))+
@@ -187,7 +191,7 @@ theme(legend.position = "none")+
 
 Looking better, but our arrow and scale are being plotted on top of each other. The `annotation` functions allows us to customize these items a little bit. For `annotation_scale`, let's set a width_hint, which will determine the width of our scale in our final map (in inches). Let's also customize our north arrow: with `pad_x` and `pad_y`, we can nudge our arrow away from the borders of our map (in this case, 0.3 inches in the x axis, and 0.5 inches in the y axis). We also change the style of our arrow to one of the styles available in the function (`north_arrow_fancy_orienteering` sounds prettier).
 
-```{r, warning=FALSE, message=FALSE, fig.width=4, fig.height=2}
+```{r, warning=FALSE, message=FALSE}
 # Adjusting scale and north arrows
 ggplot()+geom_sf(data = countries, fill = 'antiquewhite')+
   geom_sf(data = states,aes(fill = gdp))+
