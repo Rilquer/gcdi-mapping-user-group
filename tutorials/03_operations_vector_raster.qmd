@@ -1,0 +1,32 @@
+---
+title: "Operations with vector and raster data"
+author: "Rilquer Mascarenhas"
+format: html
+editor: visual
+---
+
+> ## Learning Objectives
+>
+> -   Extract raster data based on vector data
+>
+> -   Operations with vector data: intersection, dissolve/union, clip and buffer
+>
+> ##### Functions taught in this tutorial:
+>
+> `raster()`, `stack()`, `crop()`, `aggregate()`, `ncell()` `rasterToPoints()`, `mask()`, `geom_raster`
+>
+> ##### Packages used in this tutorial:
+>
+> `raster`, `sf`, `ggplot2`, `dplyr,` `viridis`
+
+Use a shapefile to guide raster extraction per feature: temperature per state.
+
+Then calculate averages and stuff
+
+Modify the underlying feature structure of the shapefile:
+
+-   Dissolve and union
+
+-   Intersection and clip
+
+What if I want to create a new shapefile from the one we have. Let's see the function buffer, and let's buffer the states.

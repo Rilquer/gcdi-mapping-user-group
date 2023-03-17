@@ -47,7 +47,7 @@ In this tutorial, we will use two raster files form the [WorldClim](https://www.
 Let's first load the temperature data. The raster file we will use is in the **.tif** format, a common format for image files (you can find raster files in other formats such as **.grd**). It is located in our `data` folder, so we will proceed as follows:
 
 ```{r}
-mean_temp <- raster('data/wc2.1_5m_bio_1.tif')
+mean_temp <- raster('data/raster_files/wc2.1_5m_bio_1.tif')
 ```
 
 Let's take a look at the object we just created by calling it:
@@ -87,7 +87,7 @@ This is a good first interaction with our object. But we still have another file
 We can make a stack using the function `stack`. We provide to the function a vector with the location of the files in our folders:
 
 ```{r}
-climate <- stack(c('data/wc2.1_5m_bio_1.tif','data/wc2.1_5m_bio_12.tif'))
+climate <- stack(c('data/raster_files/wc2.1_5m_bio_1.tif','data/raster_files/wc2.1_5m_bio_12.tif'))
 ```
 
 Now let's call this object to see what is in it:
@@ -227,7 +227,7 @@ library(sf)
 We will read the same shapefile of US states from the previous tutorial:
 
 ```{r}
-states <- read_sf('data/us_state_boundaries/ne_110m_admin_1_states_provinces.shp')
+states <- read_sf('data/shapefiles/us_state_boundaries/ne_110m_admin_1_states_provinces.shp')
 ```
 
 Now we will use the function `filter()` from `tidyverse` to subset this shapefile. We want only the polygon representing New York State. So we can filter out only the row (i.e, the feature) that corresponds to New York State.

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -162,7 +162,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In this tutorial, we will use two raster files form the <a href="https://www.worldclim.org/data/worldclim21.html">WorldClim</a> database. This database provides raster files for global temperature and precipitation per month, as well as one file for each of the 19 so-called <a href="https://www.worldclim.org/data/bioclim.html">Bioclimatic Variables</a>. These variables are derived from the monthly temperature and precipitation values, and represent annual trends, seasonality and extremes of those variables. Biologists use these variables a lot to try and understand what make species able to live in certain places and not others. Here we will use two bioclimatic variables: <strong>bio01</strong> (mean annual temperature) and <strong>bio12</strong> (mean annual precipitation).</p>
 <p>Let’s first load the temperature data. The raster file we will use is in the <strong>.tif</strong> format, a common format for image files (you can find raster files in other formats such as <strong>.grd</strong>). It is located in our <code>data</code> folder, so we will proceed as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mean_temp <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">'data/wc2.1_5m_bio_1.tif'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mean_temp <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">'data/raster_files/wc2.1_5m_bio_1.tif'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s take a look at the object we just created by calling it:</p>
 <div class="cell">
@@ -204,7 +204,7 @@ values     : -54.73946, 31.05112  (min, max)</code></pre>
 <p><code>stack</code> is a specific raster object in the <code>raster</code> package that allows us to, literally, stack several raster files with the same extent and resolution into one object. This keeps our environment less messy (avoid having several objects) and allows to further manipulate different raster layers files all together, as well as better integrate them in further analyses.</p>
 <p>We can make a stack using the function <code>stack</code>. We provide to the function a vector with the location of the files in our folders:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>climate <span class="ot">&lt;-</span> <span class="fu">stack</span>(<span class="fu">c</span>(<span class="st">'data/wc2.1_5m_bio_1.tif'</span>,<span class="st">'data/wc2.1_5m_bio_12.tif'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>climate <span class="ot">&lt;-</span> <span class="fu">stack</span>(<span class="fu">c</span>(<span class="st">'data/raster_files/wc2.1_5m_bio_1.tif'</span>,<span class="st">'data/raster_files/wc2.1_5m_bio_12.tif'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now let’s call this object to see what is in it:</p>
 <div class="cell">
@@ -374,7 +374,7 @@ max values :   28.56683, 5353.00000 </code></pre>
 </div>
 <p>We will read the same shapefile of US states from the previous tutorial:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>states <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="st">'data/us_state_boundaries/ne_110m_admin_1_states_provinces.shp'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>states <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="st">'data/shapefiles/us_state_boundaries/ne_110m_admin_1_states_provinces.shp'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we will use the function <code>filter()</code> from <code>tidyverse</code> to subset this shapefile. We want only the polygon representing New York State. So we can filter out only the row (i.e, the feature) that corresponds to New York State.</p>
 <p>We load the <code>dplyr</code> package, the <code>tidyverse</code> package that contains the <code>filter()</code> function, and use <code>%&gt;%</code> to feed our <code>states</code> shapefile into the <code>filter()</code> function. Everything is saved into the object named <code>ny_state</code>.</p>
