@@ -19,6 +19,12 @@ editor: visual
 >
 > `raster`, `sf`, `ggplot2`, `dplyr,` `viridis`
 
+```{r}
+library(raster)
+library(sf)
+states <- read_sf('')
+```
+
 Use a shapefile to guide raster extraction per feature: temperature per state.
 
 Then calculate averages and stuff
