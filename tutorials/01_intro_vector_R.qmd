@@ -130,7 +130,7 @@ We can also customize the color that is being used for the states. We could choo
 
 Taking a quick look at the application, it seems to me that a sequential gradient from light green to a dark blue would convey what we want to show here: states with lower GDP in a ligher color and higher GDP in darker color, with a nice intermediate in the middle. The choice of green and blue was personal; you could choose any other color that you think would be more appealing to you and/or your audience.
 
-To apply this gradient here, we will use the `ggplot` function `scale_fill_gradient2`. This function allows us to set the colors for the lower, middle and higher end of our gradient. From the [ColorBrewer](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=5) website, I can get the hexadecimal code for each color: **#f0f9e8** for light green, **#7bccc4** for the intermediate and **#0868ac** for the darker blue.
+To apply this gradient here, we will use the `ggplot` function `scale_fill_gradient2`. This function allows us to set the colors for the lower, middle and higher end of our gradient. From the [ColorBrewer](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3) website, I can get the hexadecimal code for each color: **#f0f9e8** for light green, **#7bccc4** for the intermediate and **#0868ac** for the darker blue.
 
 ```{r, warning=FALSE, message=FALSE}
 ggplot()+geom_sf(data = countries, fill = 'antiquewhite')+

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -252,7 +252,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>We can also customize the color that is being used for the states. We could choose a gradient color that we think might have a better appeal with our audience, or convey the informaiton we want better. One good option to decide on color schemes for mapping is to check this little application in the <a href="https://colorbrewer2.org/#type=sequential&amp;scheme=BuGn&amp;n=5">ColorBrewer</a> website. There, you can explore different types of gradientes, with different color, choose different number of data classes and even filter only gradients that are colorblind safe. The application allows you to quickly visualize the gradient in a map, so you can have a feel of how it would look like. Finally, it also shows you the hexadecimal code for each color so you can use it in your own programming language (which in our case is R).</p>
 <p>Taking a quick look at the application, it seems to me that a sequential gradient from light green to a dark blue would convey what we want to show here: states with lower GDP in a ligher color and higher GDP in darker color, with a nice intermediate in the middle. The choice of green and blue was personal; you could choose any other color that you think would be more appealing to you and/or your audience.</p>
-<p>To apply this gradient here, we will use the <code>ggplot</code> function <code>scale_fill_gradient2</code>. This function allows us to set the colors for the lower, middle and higher end of our gradient. From the <a href="https://colorbrewer2.org/#type=sequential&amp;scheme=BuGn&amp;n=5">ColorBrewer</a> website, I can get the hexadecimal code for each color: <strong>#f0f9e8</strong> for light green, <strong>#7bccc4</strong> for the intermediate and <strong>#0868ac</strong> for the darker blue.</p>
+<p>To apply this gradient here, we will use the <code>ggplot</code> function <code>scale_fill_gradient2</code>. This function allows us to set the colors for the lower, middle and higher end of our gradient. From the <a href="https://colorbrewer2.org/#type=sequential&amp;scheme=BuGn&amp;n=3">ColorBrewer</a> website, I can get the hexadecimal code for each color: <strong>#f0f9e8</strong> for light green, <strong>#7bccc4</strong> for the intermediate and <strong>#0868ac</strong> for the darker blue.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span><span class="fu">geom_sf</span>(<span class="at">data =</span> countries, <span class="at">fill =</span> <span class="st">'antiquewhite'</span>)<span class="sc">+</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> states,<span class="fu">aes</span>(<span class="at">fill =</span> gdp))<span class="sc">+</span></span>
