@@ -1,0 +1,36 @@
+---
+title: "Interactive maps in R"
+author: "Rilquer Mascarenhas"
+format: html
+editor: visual
+---
+
+> ## Learning Objectives
+>
+> -   
+>
+> ##### Functions taught in this tutorial:
+>
+> `extract()`, `sapply()`, `group_by()`, `mutate()`, `summarize()`
+>
+> ##### Packages used in this tutorial:
+>
+> `raster`, `sf`, `ggplot2`, `dplyr`
+
+Interactive maps are a powerful communication tool as they allow users to move around the geographic area and see information about different entities as they do it. Unsurprisingly, a few packages to create interactive maps exist in R. Here, we will use the package `leaflet,` along with functions from other packages we have seen in previous tutorials.
+
+### 1. Reading point data
+
+For this tutorial, we will be making an interactive map of the stops in the NYC subway system. Our goal will be to have one point for each stop, over a map with the streets of the city. We also want to allow some information about the stop (which trains run there, the ) to pop-up when the user clicks on the point. To do so, we need to 1) read a shapefile with the coordinates for the subway stops; and 2) transfer that information to functions in the `leaflet` package.
+
+Interactive map of new york city subway stops
+
+Reading shapefile
+
+Transforming to dataframe
+
+Mapping with leaflet
+
+Customizing pop-up label
+
+Customizing markers

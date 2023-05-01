@@ -1,0 +1,22 @@
+---
+title: "Mapping of CUNY Food Pantries"
+author: "Rilquer Mascarenhas"
+format: html
+editor: visual
+---
+
+> ## Learning Objectives
+>
+> -   
+>
+> ##### Functions taught in this tutorial:
+>
+> ##### Packages used in this tutorial:
+
+Use tidygeocoder to find coordinates of campus
+
+Adding that to interactive map
+
+Calculate distance to nearest subway stop
+
+Color code by distance
