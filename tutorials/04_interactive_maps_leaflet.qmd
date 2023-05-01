@@ -7,30 +7,139 @@ editor: visual
 
 > ## Learning Objectives
 >
-> -   
+> -   Create an interactive map in R
+>
+> -   Customize the appearance of points in the interactive map
 >
 > ##### Functions taught in this tutorial:
 >
-> `extract()`, `sapply()`, `group_by()`, `mutate()`, `summarize()`
+> `rename()`, `leaflet()`, `addTiles()`, `addMarkers()`, `addCircleMarkers()`, `paste()`
 >
 > ##### Packages used in this tutorial:
 >
-> `raster`, `sf`, `ggplot2`, `dplyr`
+> `leaflet`, `sf`, `dplyr`, `htmlwidgets`
 
-Interactive maps are a powerful communication tool as they allow users to move around the geographic area and see information about different entities as they do it. Unsurprisingly, a few packages to create interactive maps exist in R. Here, we will use the package `leaflet,` along with functions from other packages we have seen in previous tutorials.
+Interactive maps are a powerful tool to explore the spatial data you have as well as to communicate informatio to your audience. Plotting your spatial data interactively allows you to explore details and observe patterns you may miss with static maps, helping you to take decisions about your research. As a communication tool, interactive maps allow your audience to engage with the data at different close-ups and to choose the information they want to see as they move around the geographic area, creating a different experience of interacting with the data.
 
-### 1. Reading point data
+Unsurprisingly, a few packages to create interactive maps exist in R. Here, we will use the package [Leaflet](https://rstudio.github.io/leaflet/) an implementation in R of the [javascript library with the same name](https://leafletjs.com/). This library contains several functions to create friendly interactive maps, and the R package allows us to implement the `javascript` code with just a few lines of code.
 
-For this tutorial, we will be making an interactive map of the stops in the NYC subway system. Our goal will be to have one point for each stop, over a map with the streets of the city. We also want to allow some information about the stop (which trains run there, the ) to pop-up when the user clicks on the point. To do so, we need to 1) read a shapefile with the coordinates for the subway stops; and 2) transfer that information to functions in the `leaflet` package.
+For this tutorial, we will be making an interactive map of the stops in the NYC subway system. Our goal will be the stops shown as spatial points, over a map of the city streets. Additionally, we also want some information about each stop (e.g., which trains run there) to pop-up when the user clicks on the point. To do so, we will read a shapefile coordinates and information for the subway stops and transfer that info to functions in the `leaflet` package.
 
-Interactive map of new york city subway stops
+#### 1. Basic interactive map
 
-Reading shapefile
+Our first step is to read our shapefile:
 
-Transforming to dataframe
+```{r message=FALSE,warning=FALSE,results='hide'}
+library(sf)
+subway <- read_sf('data/shapefiles/nyc_subway_stations/nyc_subway_stations.shp')
+```
 
-Mapping with leaflet
+Taking a quick look at this dataset, we can see that we have some information, such as `stop_name`, the `trains` that go through that station, the `structure` of the station (elevated, subway, etc.), as well as longitude and latitude for each stops. The `leaflet` package can directly load `sf` objects, but here, in order to avoid having to deal with projections (since the `subway` data is in a very specific New York Area projection), we will transform this `sf` object into a plain `data.frame`. This will allow us to give `leaflet` the direct information of the coordinates from columns `stop_lat` and `stop_long`.
 
-Customizing pop-up label
+In the code below, we save `subway` as a `data.frame` and use the `rename()` function to change the name of the columns containing the longitude and latitude information (since `leaflet` does not automatically recognize `stop_lat` and `stop_long`.
 
-Customizing markers
+```{r}
+library(dplyr)
+subway <- data.frame(subway) %>%
+  rename(latitude = stop_lat,longitude = stop_lon)
+```
+
+Now we can use this `data.frame` with the functions in the `leaflet` package. These functions work similar to `ggplot`, in that you first call a general `leaflet()` function, and proceed by telling `leaflet` what we want to add to our map. The basic information we need to provide in all `leaflet` maps is the underlying basemap image that we will use to represent our spatial surface (which we call `tiles`). An additional piece of information, specific to our map, are the points we are interested in plotting (which we call `markers`).
+
+We can provide those two pieces of information using two functions: `addTiles()` and `addMarkers()`. At first, we do not need to give any extra information to `addTiles()`; this will tell `leaflet` to use it's standard [OpenStreet](openstreetmap.org) basemap. You can also use [different types of basemaps](http://rstudio.github.io/leaflet/basemaps.html), by using different functions, or combine different tiles together.
+
+In the function `addMarkers()`, we need to provide the source of longitude and latitude information, which we do by using the argument `data`.
+
+```{r}
+library(leaflet)
+leaflet() %>%
+  addTiles() %>% 
+  addMarkers(data = subway)
+```
+
+This simple piece of code automatically loads the OpenStreet Map tiles and adds our points to this map. Notice that the pop-up window automatically centers around all the points we added. We can use this window to move around the map and zoom in and out of it.
+
+> Try to move around in this map and find your daily commute subway stop.
+
+#### 2. Adding pop-up information
+
+We can add pop-up information to be shown when clicking on each marker by using the argument `popup` in the `addMarkers()` function. That argument needs to be provided with a `string` value, i.e., a text to be shown when the marker is clicked on. We can create that string by using the function `paste()` to add glue together information from our `subway` data.frame into one single string. We can also use the *html* notation `<br>` which represents a line break. This will allow us to organize the string into a neat format to be shown in the map.
+
+Here, we chose to display `stop_name`, the `trains` running in that stop and the `structure` of the stop. In the function `paste()`, we give the different bits of the text separated by comma. The fixed text is written in quotes, whereas the values that will differ based on the stop are given as an object. In here, we give the columns within our `subway` data.frame using the `$` notation. Then, we add `<br>` at the end of every info before inserting the new one.
+
+```{r}
+popup_label <- paste('Stop Name: ', subway$stop_name, "<br>",
+                     'Trains: ', subway$trains, "<br>",
+                     'Structure: ', subway$structure)
+```
+
+This function actually creates a vector of strings. If you call `popup_label[1]`, you will notice that it is the string referring to the first line in our `data.frame`. `popup_label[2]` refers to the second line, and so on. When you give that vector of strings to the `popup` argument in the function `addMarkers()`, the function understands that each string corresponds to the pop-up label to be shown when each marker is clicked on.
+
+```{r}
+leaflet() %>%
+  addTiles() %>% 
+  addMarkers(data = subway,
+             popup = popup_label)
+```
+
+> Now try and click on different markers to see what shows up.
+
+#### 3. Customizing markers
+
+One final customization we might want to do is to change the markers we are using for our subway stops. Maybe we don't want them to be so big, or have this standard pin shape. `leaflet` provides many functions and arguments to [customize markers](http://rstudio.github.io/leaflet/markers.html). You can even color code them based on different information, or display the number of markers at one spot, when they all overlap at the same location. Here, we will change to the function `addCircleMarkers()`, which basically transforms our marker icon in circles icons.
+
+```{r}
+leaflet() %>%
+  addTiles() %>% 
+  addCircleMarkers(data = subway,
+                   popup = popup_label)
+```
+
+We can further customize the details of those markers, as seen in the code below. For instance, we can:
+
+-   Set the radius of the markers (`radius = 6`);
+
+-   Set the color of the markers (`color = 'darkred'`);
+
+-   Remove the outer line of the markers (`stroke = FALSE`);
+
+-   Set the level of opacity of the markers (`fillOpacity = 0.6`).
+
+```{r}
+leaflet() %>%
+  addTiles() %>% 
+  addCircleMarkers(data = subway,
+                   popup = popup_label,
+                   radius = 6,
+                   color = 'darkred',
+                   stroke = FALSE,
+                   fillOpacity = 0.6)
+```
+
+#### 4. Saving map as html
+
+Once we're happy with our customization, we can save this map as an `html` file, which can be shared directly with other people or embedded on your own website.
+
+To do so, we need the package `htmlwidget`, which has functions to output `html` code.
+
+First, we save our interactive map to an object...
+
+```{r}
+map <- leaflet() %>%
+  addTiles() %>% 
+  addCircleMarkers(data = subway,
+                   popup = popup_label,
+                   radius = 6,
+                   color = 'darkred',
+                   stroke = FALSE,
+                   fillOpacity = 0.6)
+```
+
+... then we use the `saveWidget()` function from the `htmlwidget` package to write that object as a file. We also provide a title to this map with the `title` argument.
+
+```{r}
+library(htmlwidgets)
+saveWidget(map,file = 'saved_maps/nyc_subway_stops.html',title = 'NYC Subway Stops')
+```
+
+This is a quick intro to leaflet. Make sure to check the [official page to the leaflet R package](https://rstudio.github.io/leaflet/) for more tutorials and options.
