@@ -133,7 +133,7 @@ climate
 
 Now that we have our files loaded up, let's go over some functions to modify what we have.
 
-Let's say we want to focus on the the temperature and precipitation values for North America. We can modify the extent of our `stack` object to a smaller coverage. If you have gone over the [Intro to Vector Data](https://github.com/Rilquer/gcdi-mapping-user-group/blob/main/tutorials/01_intro_vector_R/01_intro_vector_R.md) tutorial, then you will remember that we can define the extent by supplying a vector with the values `xmin`, `xmax`, `ymin` and `ymax`, in that exact order. We can do use that defined extent in the `crop` function from the `raster` package to reduce the extent of all layers in our stack.
+Let's say we want to focus on the the temperature and precipitation values for North America. We can modify the extent of our `stack` object to a smaller coverage. If you have gone over the [Intro to Vector Data](https://htmlpreview.github.io/?https://github.com/Rilquer/gcdi-mapping-user-group/blob/main/tutorials/01_intro_vector_R.html) tutorial, then you will remember that we can define the extent by supplying a vector with the values `xmin`, `xmax`, `ymin` and `ymax`, in that exact order. We can do use that defined extent in the `crop` function from the `raster` package to reduce the extent of all layers in our stack.
 
 ```{r}
 climate_namer <- crop(climate,c(-141,-51,17,59))
